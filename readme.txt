@@ -25,9 +25,9 @@ A quick look into Twitter Auto Publish :
 
 The Twitter Auto Publish lets you publish posts automatically from your blog to Twitter. You can publish your posts to Twitter as simple text message or as text message with image. The plugin supports filtering posts based on  custom post-types as well as categories.
 
-The prominent features of  the social media auto publish plugin are highlighted below.
+The prominent features of  the Twitter Auto Publish plugin are highlighted below.
 
-= Supported Social Media =
+= Supported Mechanisms =
 
 The various mechanisms of posting to Twitter are listed below. 
 
