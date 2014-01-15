@@ -109,7 +109,7 @@ More questions ? [Drop a mail](http://xyzscripts.com/members/support/ "XYZScript
 == Changelog ==
 
 = Twitter Auto Publish 1.0.2 =
-* Bug fixed for &nbsp; in post.
+* Bug fixed for &amp;nbsp; in post.
 * Twitter api updated to https.
 
 = Twitter Auto Publish 1.0.1 =
