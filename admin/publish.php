@@ -167,8 +167,11 @@ function xyz_twap_link_publish($post_ID) {
 		$description=strip_tags($description);		
 		$description=strip_shortcodes($description);
 
-		
-		
+		$description=str_replace("&nbsp;","",$description);
+		//$description=str_replace(array("\r\n","\r","\n"), '', $description);
+	
+		$excerpt=str_replace("&nbsp;","",$excerpt);
+		//$excerpt=str_replace(array("\r\n","\r","\n"), '', $excerpt);
 
 
 		if($taccess_token!="" && $taccess_token_secret!="" && $tappid!="" && $tappsecret!="" && $post_twitter_permission==1)
@@ -197,6 +200,9 @@ function xyz_twap_link_publish($post_ID) {
 			///Twitter upload image end/////
 				
 
+			$messagetopost=str_replace("&nbsp;","",$messagetopost);
+			//$messagetopost=str_replace(array("\r\n","\r","\n"), '', $messagetopost);
+			
 			preg_match_all("/{(.+?)}/i",$messagetopost,$matches);
 			$matches1=$matches[1];$substring="";$islink=0;$issubstr=0;
 			$len=118;
@@ -283,7 +289,7 @@ function xyz_twap_link_publish($post_ID) {
 			if($image_found==1 && $post_twitter_image_permission==1)
 			{
 				try{
-				$resultfrtw = $twobj -> request('POST', 'http://api.twitter.com/1.1/statuses/update_with_media.json', array( 'media[]' => $img, 'status' => $substring), true, true);
+				$resultfrtw = $twobj -> request('POST', 'https://api.twitter.com/1.1/statuses/update_with_media.json', array( 'media[]' => $img, 'status' => $substring), true, true);
 				}
 				catch(Exception $e)
 				{
