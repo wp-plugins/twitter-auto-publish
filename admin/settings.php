@@ -28,12 +28,12 @@ if(isset($_POST['twit']))
 	if($tappid=="" && $tposting_permission==1)
 	{
 		$terf=1;
-		$tms1="Please fill consumer id.";
+		$tms1="Please fill api key.";
 
 	}
 	elseif($tappsecret=="" && $tposting_permission==1)
 	{
-		$tms2="Please fill consumer secret.";
+		$tms2="Please fill api secret.";
 		$terf=1;
 	}
 	elseif($twid=="" && $tposting_permission==1)
@@ -87,15 +87,6 @@ if(isset($_POST['twit']) && $terf==0)
 		id="system_notice_area_dismiss">Dismiss</span>
 </div>
 <?php }
-if(isset($_GET['msg']) && $_GET['msg']==1)
-{
-?>
-<div class="system_notice_area_style0" id="system_notice_area">
-	Unable to authorize the linkedin application. Please check the details. &nbsp;&nbsp;&nbsp;<span
-		id="system_notice_area_dismiss">Dismiss</span>
-</div>
-	<?php 
-}
 if(isset($_POST['twit']) && $terf==1)
 {
 	?>
@@ -150,9 +141,9 @@ function dethide(id)
 
 
 			<div style="font-weight: bold;padding: 3px;">All fields given below are mandatory</div> 
-			<table class="widefat" style="width: 99%">
+			<table class="widefat xyz_twap_widefat_table" style="width: 99%">
 				<tr valign="top">
-					<td width="50%">Consumer id
+					<td width="50%">API key
 					</td>
 					<td><input id="xyz_twap_twconsumer_id"
 						name="xyz_twap_twconsumer_id" type="text"
@@ -161,7 +152,7 @@ function dethide(id)
 				</tr>
 
 				<tr valign="top">
-					<td>Consumer secret
+					<td>API secret
 					</td>
 					<td><input id="xyz_twap_twconsumer_secret"
 						name="xyz_twap_twconsumer_secret" type="text"
@@ -204,10 +195,20 @@ function dethide(id)
 							of your blog.<br />{USER_NICENAME} - Insert the nicename
 							of the author.
 						</div></td>
-					<td><textarea id="xyz_twap_twmessage" name="xyz_twap_twmessage"	><?php if($tms6=="") {
+	<td>
+	<select name="xyz_twap_info" id="xyz_twap_info" onchange="xyz_twap_info_insert(this)">
+		<option value ="0" selected="selected">--Select--</option>
+		<option value ="1">{POST_TITLE}  </option>
+		<option value ="2">{PERMALINK} </option>
+		<option value ="3">{POST_EXCERPT}  </option>
+		<option value ="4">{POST_CONTENT}   </option>
+		<option value ="5">{BLOG_TITLE}   </option>
+		<option value ="6">{USER_NICENAME}   </option>
+		</select> </td></tr><tr><td>&nbsp;</td><td>
+		<textarea id="xyz_twap_twmessage"  name="xyz_twap_twmessage" style="height:80px !important;" ><?php if($tms6=="") {
 								echo esc_textarea(get_option('xyz_twap_twmessage'));}?></textarea>
-					</td>
-				</tr>
+	</td></tr>
+						
 				
 				<tr valign="top">
 					<td>Attach image to twitter post
@@ -270,7 +271,9 @@ function dethide(id)
         if(isset($_POST['post_types']))
 		$xyz_customtypes=$_POST['post_types'];
 
-
+        $xyz_twap_peer_verification=$_POST['xyz_twap_peer_verification'];
+        $xyz_twap_premium_version_ads=$_POST['xyz_twap_premium_version_ads'];
+        
 		$twap_customtype_ids="";
 
 		if($xyz_customtypes!="")
@@ -287,6 +290,8 @@ function dethide(id)
 		update_option('xyz_twap_include_pages',$xyz_twap_include_pages);
 		update_option('xyz_twap_include_categories',$twap_category_ids);
 		update_option('xyz_twap_include_customposttypes',$twap_customtype_ids);
+		update_option('xyz_twap_peer_verification',$xyz_twap_peer_verification);
+		update_option('xyz_twap_premium_version_ads',$xyz_twap_premium_version_ads);
 
 	}
 
@@ -294,7 +299,8 @@ function dethide(id)
 	$xyz_twap_include_pages=get_option('xyz_twap_include_pages');
 	$xyz_twap_include_categories=get_option('xyz_twap_include_categories');
 	$xyz_twap_include_customposttypes=get_option('xyz_twap_include_customposttypes');
-
+	$xyz_twap_peer_verification=esc_html(get_option('xyz_twap_peer_verification'));
+	$xyz_twap_premium_version_ads=esc_html(get_option('xyz_twap_premium_version_ads'));
 
 	?>
 		<h2>Basic Settings</h2>
@@ -302,7 +308,7 @@ function dethide(id)
 
 		<form method="post">
 
-			<table class="widefat" style="width: 99%">
+			<table class="widefat xyz_twap_widefat_table" style="width: 99%">
 
 				<tr valign="top">
 
@@ -359,7 +365,7 @@ function dethide(id)
 								'hide_if_empty'      => false );
 
 						if(count(get_categories($args))>0)
-							echo str_replace( "<select", "<select multiple onClick=setcat(this) style='width:200px;height:100px;border:1px solid #cccccc;'", wp_dropdown_categories($args));
+							echo str_replace( "<select", "<select multiple onClick=setcat(this) style='width:200px;height:auto !important;border:1px solid #cccccc;'", wp_dropdown_categories($args));
 						else
 							echo "NIL";
 
@@ -403,8 +409,18 @@ function dethide(id)
 				</tr>
 
 
+				<tr valign="top">
+				
+				<td scope="row" colspan="1" width="50%">SSL peer verification	</td><td><select name="xyz_twap_peer_verification" >
+				
+				<option value ="1" <?php if($xyz_twap_peer_verification=='1') echo 'selected'; ?> >Enable </option>
+				
+				<option value ="0" <?php if($xyz_twap_peer_verification=='0') echo 'selected'; ?> >Disable </option>
+				</select> 
+				</td></tr>
+				
 
-				<tr valign="top" id="xyz_twap">
+				<tr valign="top">
 
 					<td  colspan="1">Enable credit link to author
 					</td>
@@ -420,7 +436,26 @@ function dethide(id)
 					</td>
 				</tr>
 
+				
+				
 
+				<tr valign="top">
+
+					<td  colspan="1">Enable premium version ads
+					</td>
+					<td><select name="xyz_twap_premium_version_ads" id="xyz_twap_premium_version_ads">
+
+							<option value="1"
+							<?php if($xyz_twap_premium_version_ads=='1') echo 'selected'; ?>>Yes</option>
+
+							<option
+								value="0"
+								<?php if($xyz_twap_premium_version_ads=='0') echo 'selected'; ?>>No</option>
+					</select>
+					</td>
+				</tr>
+
+				
 				<tr>
 
 					<td id="bottomBorderNone">
@@ -488,6 +523,19 @@ function rd_cat_chn(val,act)
 		  jQuery("#cat_dropdown_span").show();
 	}
 	
+}
+
+function xyz_twap_info_insert(inf){
+	
+    var e = document.getElementById("xyz_twap_info");
+    var ins_opt = e.options[e.selectedIndex].text;
+    if(ins_opt=="0")
+    	ins_opt="";
+    var str=jQuery("textarea#xyz_twap_twmessage").val()+ins_opt;
+    jQuery("textarea#xyz_twap_twmessage").val(str);
+    jQuery('#xyz_twap_info :eq(0)').prop('selected', true);
+    jQuery("textarea#xyz_twap_twmessage").focus();
+
 }
 </script>
 	<?php 

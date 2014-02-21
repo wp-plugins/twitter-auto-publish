@@ -44,6 +44,9 @@ function twap_free_destroy()
 	delete_option('xyz_twap_include_pages');
 	delete_option('xyz_twap_include_categories');
 	delete_option('xyz_twap_include_customposttypes');
+	delete_option('xyz_twap_peer_verification');
+	delete_option('xyz_twap_post_logs');
+	delete_option('xyz_twap_premium_version_ads');
 	
 }
 

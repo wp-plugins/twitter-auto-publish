@@ -18,6 +18,7 @@ function xyz_twap_menu()
 {
 	add_menu_page('Twitter Auto Publish - Manage settings', 'Twitter Auto Publish', 'manage_options', 'twitter-auto-publish-settings', 'xyz_twap_settings');
 	$page=add_submenu_page('twitter-auto-publish-settings', 'Twitter Auto Publish - Manage settings', ' Settings', 'manage_options', 'twitter-auto-publish-settings' ,'xyz_twap_settings'); // 8 for admin
+	add_submenu_page('twitter-auto-publish-settings', 'Twitter Auto Publish - Logs', 'Logs', 'manage_options', 'twitter-auto-publish-log' ,'xyz_twap_logs');
 	add_submenu_page('twitter-auto-publish-settings', 'Twitter Auto Publish - About', 'About', 'manage_options', 'twitter-auto-publish-about' ,'xyz_twap_about'); // 8 for admin
 }
 
@@ -43,5 +44,17 @@ function xyz_twap_about()
 	require( dirname( __FILE__ ) . '/footer.php' );
 }
 
+
+function xyz_twap_logs()
+{
+	$_POST = stripslashes_deep($_POST);
+	$_GET = stripslashes_deep($_GET);
+	$_POST = xyz_trim_deep($_POST);
+	$_GET = xyz_trim_deep($_GET);
+
+	require( dirname( __FILE__ ) . '/header.php' );
+	require( dirname( __FILE__ ) . '/logs.php' );
+	require( dirname( __FILE__ ) . '/footer.php' );
+}
 
 ?>

@@ -12,48 +12,10 @@ foreach ($carr  as $cstyps ) {
 
 }
 
-
-function xyz_twap_string_limit($string, $limit) {
-	
-	$space=" ";$appendstr=" ...";
-	if(mb_strlen($string) <= $limit) return $string;
-	if(mb_strlen($appendstr) >= $limit) return '';
-	$string = mb_substr($string, 0, $limit-mb_strlen($appendstr));
-	$rpos = mb_strripos($string, $space);
-	if ($rpos===false) 
-		return $string.$appendstr;
-   else 
-	 	return mb_substr($string, 0, $rpos).$appendstr;
-}
-
-function xyz_twap_getimage($post_ID,$description_org)
-{
-	$attachmenturl="";
-	$post_thumbnail_id = get_post_thumbnail_id( $post_ID );
-	if($post_thumbnail_id!="")
-	{
-		$attachmenturl=wp_get_attachment_url($post_thumbnail_id);
-		$attachmentimage=wp_get_attachment_image_src( $post_thumbnail_id, full );
-		
-	}
-	else {
-		preg_match_all('/<img.+src=[\'"]([^\'"]+)[\'"].*>/is', $description_org, $matches);
-		if(isset($matches[1][0]))
-		$attachmenturl = $matches[1][0];
-		else
-		{
-			apply_filters('the_content', $description_org);
-			preg_match_all('/<img.+src=[\'"]([^\'"]+)[\'"].*>/is', $description_org, $matches);
-			if(isset($matches[1][0]))
-				$attachmenturl = $matches[1][0];
-		}
-		
-	
-	}
-	return $attachmenturl;
-}
 function xyz_twap_link_publish($post_ID) {
 	
+	if(isset($_POST['xyz_twap_hidden_meta']) && $_POST['xyz_twap_hidden_meta']==1)
+		return ;
 	
 	$get_post_meta=get_post_meta($post_ID,"xyz_twap",true);
 	if($get_post_meta!=1)
@@ -82,7 +44,6 @@ function xyz_twap_link_publish($post_ID) {
 	$post_twitter_image_permission=get_option('xyz_twap_twpost_image_permission');
 	if(isset($_POST['xyz_twap_twpost_image_permission']))
 		$post_twitter_image_permission=$_POST['xyz_twap_twpost_image_permission'];
-		////////////////////////
 
 	
 	$postpp= get_post($post_ID);global $wpdb;
@@ -93,7 +54,8 @@ function xyz_twap_link_publish($post_ID) {
 	if ($postpp->post_status == 'publish')
 	{
 		$posttype=$postpp->post_type;
-			
+		$ln_publish_status=array();
+		
 		if ($posttype=="page")
 		{
 
@@ -168,10 +130,8 @@ function xyz_twap_link_publish($post_ID) {
 		$description=strip_shortcodes($description);
 
 		$description=str_replace("&nbsp;","",$description);
-		//$description=str_replace(array("\r\n","\r","\n"), '', $description);
 	
 		$excerpt=str_replace("&nbsp;","",$excerpt);
-		//$excerpt=str_replace(array("\r\n","\r","\n"), '', $excerpt);
 
 
 		if($taccess_token!="" && $taccess_token_secret!="" && $tappid!="" && $tappsecret!="" && $post_twitter_permission==1)
@@ -179,7 +139,7 @@ function xyz_twap_link_publish($post_ID) {
 			
 			////image up start///
 
-			
+			$img_status="";
 			if($post_twitter_image_permission==1)
 			{
 				
@@ -191,7 +151,17 @@ function xyz_twap_link_publish($post_ID) {
 				if(is_array($img))
 				{
 					if (isset($img['body'])&& trim($img['body'])!='')
-					{$img = $img['body'];$image_found = 1;}
+					{
+						$image_found = 1;
+							if (($img['headers']['content-length']) && trim($img['headers']['content-length'])!='')
+							{
+								$img_size=$img['headers']['content-length']/(1024*1024);
+								if($img_size>3){$image_found=0;$img_status="Image skipped(greater than 3MB)";}
+							}
+							
+						$img = $img['body'];
+					
+					}
 					else
 						$image_found = 0;
 				}
@@ -199,9 +169,7 @@ function xyz_twap_link_publish($post_ID) {
 			}
 			///Twitter upload image end/////
 				
-
 			$messagetopost=str_replace("&nbsp;","",$messagetopost);
-			//$messagetopost=str_replace(array("\r\n","\r","\n"), '', $messagetopost);
 			
 			preg_match_all("/{(.+?)}/i",$messagetopost,$matches);
 			$matches1=$matches[1];$substring="";$islink=0;$issubstr=0;
@@ -288,26 +256,42 @@ function xyz_twap_link_publish($post_ID) {
 				
 			if($image_found==1 && $post_twitter_image_permission==1)
 			{
-				try{
 				$resultfrtw = $twobj -> request('POST', 'https://api.twitter.com/1.1/statuses/update_with_media.json', array( 'media[]' => $img, 'status' => $substring), true, true);
+				
+				if($resultfrtw!=200){
+					if($twobj->response['response']!="")
+						$tw_publish_status["statuses/update_with_media"]=print_r($twobj->response['response'], true);
+					else
+						$tw_publish_status["statuses/update_with_media"]=$resultfrtw;
 				}
-				catch(Exception $e)
-				{
-				//echo $e->getmessage();
-				}
+				
 			}
 			else
 			{
-				try{
 				$resultfrtw = $twobj->request('POST', $twobj->url('1.1/statuses/update'), array('status' =>$substring));
+				
+				if($resultfrtw!=200){
+					if($twobj->response['response']!="")
+						$tw_publish_status["statuses/update"]=print_r($twobj->response['response'], true);
+					else
+						$tw_publish_status["statuses/update"]=$resultfrtw;
 				}
-				catch(Exception $e)
-				{
-				//echo $e->getmessage();
-				}
+				else if($img_status!="")
+					$tw_publish_status["statuses/update_with_media"]=$img_status;
 			}
-			//print_r($resultfrtw);
-			//die;
+			if(count($tw_publish_status)>0)
+				$tw_publish_status_insert=serialize($tw_publish_status);
+			else
+				$tw_publish_status_insert=1;
+			
+			$time=time();
+			$post_tw_options=array(
+					'postid'	=>	$post_ID,
+					'acc_type'	=>	"Twitter",
+					'publishtime'	=>	$time,
+					'status'	=>	$tw_publish_status_insert
+			);
+			update_option('xyz_twap_post_logs', $post_tw_options);
 		}
 		
 	}
