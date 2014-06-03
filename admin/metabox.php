@@ -73,12 +73,14 @@ if(tcheckid==1)
 {
 
 	document.getElementById("twmf_twap").style.display='';
+	document.getElementById("twmftarea_twap").style.display='';
 	document.getElementById("twai_twap").style.display='';	
 }
 else
 {
 	
 	document.getElementById("twmf_twap").style.display='none';
+	document.getElementById("twmftarea_twap").style.display='none';
 	document.getElementById("twai_twap").style.display='none';		
 }
 
@@ -113,9 +115,9 @@ function dethide_twap(id)
 <tr><td colspan="2" valign="top">&nbsp;</td></tr>
 
 	<tr valign="top">
-		<td class="xyz_twap_pleft15">Enable auto publish	posts to my twitter account
+		<td class="xyz_twap_pleft15" width="60%">Enable auto publish	posts to my twitter account
 		</td>
-		<td><select id="xyz_twap_twpost_permission" name="xyz_twap_twpost_permission"
+		<td width="40%"><select id="xyz_twap_twpost_permission" name="xyz_twap_twpost_permission"
 			onchange="displaycheck_twap()">
 				<option value="0"
 				<?php  if(get_option('xyz_twap_twpost_permission')==0) echo 'selected';?>>
@@ -162,7 +164,9 @@ function dethide_twap(id)
 		<option value ="4">{POST_CONTENT}   </option>
 		<option value ="5">{BLOG_TITLE}   </option>
 		<option value ="6">{USER_NICENAME}   </option>
-		</select> </td></tr><tr><td>&nbsp;</td><td>
+		</select> </td></tr>
+		
+		<tr id="twmftarea_twap"><td>&nbsp;</td><td>
 		<textarea id="xyz_twap_twmessage"  name="xyz_twap_twmessage" style="height:80px !important;" ><?php echo esc_textarea(get_option('xyz_twap_twmessage'));?></textarea>
 	</td></tr>
 	
