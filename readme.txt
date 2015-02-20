@@ -3,8 +3,8 @@ Contributors: f1logic
 Donate link: http://xyzscripts.com/donate/
 Tags:  twitter, twitter auto publish, publish post to twitter, add link to twitter, twitter publishing, post to twitter, social media auto publish, social media publishing, social network auto publish, social media, social network
 Requires at least: 2.8
-Tested up to: 4.0
-Stable tag: 1.1.1
+Tested up to: 4.1
+Stable tag: 1.2
 License: GPLv2 or later
 
 Publish posts automatically to Twitter.
@@ -112,6 +112,11 @@ More questions ? [Drop a mail](http://xyzscripts.com/members/support/ "XYZScript
 2. Publishing options while creating a post.
 
 == Changelog ==
+
+= Twitter Auto Publish 1.2 =
+* Option to configure auto publish settings while editing posts/pages
+* General setting to enable/disable post publishing
+* Fixed auto-publish of scheduled posts
 
 = Twitter Auto Publish 1.1.1 =
 * Added compatibility with wordpress 3.9.1

@@ -42,12 +42,13 @@ function twap_free_destroy()
 	delete_option('xyz_twap_free_version');
 	
 	delete_option('xyz_twap_include_pages');
+	delete_option('xyz_twap_include_posts');
 	delete_option('xyz_twap_include_categories');
 	delete_option('xyz_twap_include_customposttypes');
 	delete_option('xyz_twap_peer_verification');
 	delete_option('xyz_twap_post_logs');
 	delete_option('xyz_twap_premium_version_ads');
-	
+	delete_option('xyz_twap_default_selection_edit');
 }
 
 register_uninstall_hook(XYZ_TWAP_PLUGIN_FILE,'twap_free_network_destroy');

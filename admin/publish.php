@@ -2,6 +2,12 @@
 
 add_action('publish_post', 'xyz_twap_link_publish');
 add_action('publish_page', 'xyz_twap_link_publish');
+add_action('future_to_publish', 'xyz_link_twap_future_to_publish');
+
+function xyz_link_twap_future_to_publish($post){
+	$postid =$post->ID;
+	xyz_twap_link_publish($postid);
+}
 
 
 
@@ -14,14 +20,17 @@ foreach ($carr  as $cstyps ) {
 
 function xyz_twap_link_publish($post_ID) {
 	
+	$_POST_CPY=$_POST;
+	$_POST=stripslashes_deep($_POST);
+	
 	if(isset($_POST['xyz_twap_hidden_meta']) && $_POST['xyz_twap_hidden_meta']==1)
-		return ;
+	{$_POST=$_POST_CPY;return ;}
 	
 	$get_post_meta=get_post_meta($post_ID,"xyz_twap",true);
 	if($get_post_meta!=1)
 		add_post_meta($post_ID, "xyz_twap", "1");
 	else 
-		return;
+	{$_POST=$_POST_CPY;return;}
 	global $current_user;
 	get_currentuserinfo();
 	$af=get_option('xyz_twap_af');
@@ -61,11 +70,17 @@ function xyz_twap_link_publish($post_ID) {
 
 			$xyz_twap_include_pages=get_option('xyz_twap_include_pages');
 			if($xyz_twap_include_pages==0)
-				return;
+			{$_POST=$_POST_CPY;return;}
 		}
 			
 		if($posttype=="post")
 		{
+			$xyz_twap_include_posts=get_option('xyz_twap_include_posts');
+			if($xyz_twap_include_posts==0)
+			{
+				$_POST=$_POST_CPY;return;
+			}
+			
 			$xyz_twap_include_categories=get_option('xyz_twap_include_categories');
 			if($xyz_twap_include_categories!="All")
 			{
@@ -82,11 +97,11 @@ function xyz_twap_link_publish($post_ID) {
 					
 					
 				if($retflag==1)
-					return;
+				{$_POST=$_POST_CPY;return;}
 			}
 		}
 
-
+		include_once ABSPATH.'wp-admin/includes/plugin.php';
 		$pluginName = 'bitly/bitly.php';
 		
 		if (is_plugin_active($pluginName)) {
@@ -302,6 +317,7 @@ function xyz_twap_link_publish($post_ID) {
 		
 	}
 	
+	$_POST=$_POST_CPY;
 
 }
 

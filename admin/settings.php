@@ -230,7 +230,7 @@ function dethide(id)
 					<td><select id="xyz_twap_twpost_permission"
 						name="xyz_twap_twpost_permission">
 							<option value="0"
-							<?php  if(get_option('xyz_twap_twpost_prmission')==0) echo 'selected';?>>
+							<?php  if(get_option('xyz_twap_twpost_permission')==0) echo 'selected';?>>
 								No</option>
 							<option value="1"
 							<?php  if(get_option('xyz_twap_twpost_permission')==1) echo 'selected';?>>Yes</option>
@@ -258,8 +258,8 @@ function dethide(id)
 	if(isset($_POST['bsettngs']))
 	{
 
-
 		$xyz_twap_include_pages=$_POST['xyz_twap_include_pages'];
+		$xyz_twap_include_posts=$_POST['xyz_twap_include_posts'];
 
 		if($_POST['xyz_twap_cat_all']=="All")
 			$twap_category_ids=$_POST['xyz_twap_cat_all'];//redio btn name
@@ -273,6 +273,7 @@ function dethide(id)
 
         $xyz_twap_peer_verification=$_POST['xyz_twap_peer_verification'];
         $xyz_twap_premium_version_ads=$_POST['xyz_twap_premium_version_ads'];
+        $xyz_twap_default_selection_edit=$_POST['xyz_twap_default_selection_edit'];
         
 		$twap_customtype_ids="";
 
@@ -288,20 +289,25 @@ function dethide(id)
 
 
 		update_option('xyz_twap_include_pages',$xyz_twap_include_pages);
-		update_option('xyz_twap_include_categories',$twap_category_ids);
+		update_option('xyz_twap_include_posts',$xyz_twap_include_posts);
+		if($xyz_twap_include_posts==0)
+			update_option('xyz_twap_include_categories',"All");
+		else
+			update_option('xyz_twap_include_categories',$twap_category_ids);
 		update_option('xyz_twap_include_customposttypes',$twap_customtype_ids);
 		update_option('xyz_twap_peer_verification',$xyz_twap_peer_verification);
 		update_option('xyz_twap_premium_version_ads',$xyz_twap_premium_version_ads);
-
+		update_option('xyz_twap_default_selection_edit',$xyz_twap_default_selection_edit);
 	}
 
 	$xyz_credit_link=get_option('xyz_credit_link');
 	$xyz_twap_include_pages=get_option('xyz_twap_include_pages');
+	$xyz_twap_include_posts=get_option('xyz_twap_include_posts');
 	$xyz_twap_include_categories=get_option('xyz_twap_include_categories');
 	$xyz_twap_include_customposttypes=get_option('xyz_twap_include_customposttypes');
 	$xyz_twap_peer_verification=esc_html(get_option('xyz_twap_peer_verification'));
 	$xyz_twap_premium_version_ads=esc_html(get_option('xyz_twap_premium_version_ads'));
-
+	$xyz_twap_default_selection_edit=esc_html(get_option('xyz_twap_default_selection_edit'));
 	?>
 		<h2>Basic Settings</h2>
 
@@ -324,10 +330,25 @@ function dethide(id)
 					</select>
 					</td>
 				</tr>
-
+				
 				<tr valign="top">
 
-					<td  colspan="1">Select wordpress categories for auto publish
+					<td  colspan="1">Publish wordpress `posts` to social media
+					</td>
+					<td><select name="xyz_twap_include_posts" onchange="xyz_twap_show_postCategory(this.value);">
+
+							<option value="1"
+							<?php if($xyz_twap_include_posts=='1') echo 'selected'; ?>>Yes</option>
+
+							<option value="0"
+							<?php if($xyz_twap_include_posts!='1') echo 'selected'; ?>>No</option>
+					</select>
+					</td>
+				</tr>
+				
+				<tr valign="top" id="selPostCat">
+
+					<td  colspan="1">Select post categories for auto publish
 					</td>
 					<td><input type="hidden"
 						value="<?php echo $xyz_twap_include_categories;?>"
@@ -407,7 +428,17 @@ function dethide(id)
 					?>
 					</td>
 				</tr>
+				<tr valign="top">
 
+					<td scope="row" colspan="1" width="50%">Default selection of auto publish while editing posts/pages	
+					</td><td><select name="xyz_twap_default_selection_edit" >
+					
+					<option value ="1" <?php if($xyz_twap_default_selection_edit=='1') echo 'selected'; ?> >Yes </option>
+					
+					<option value ="0" <?php if($xyz_twap_default_selection_edit=='0') echo 'selected'; ?> >No </option>
+					</select> 
+					</td>
+				</tr>
 
 				<tr valign="top">
 				
@@ -479,12 +510,18 @@ function dethide(id)
 	//drpdisplay();
 var catval='<?php echo $xyz_twap_include_categories; ?>';
 var custtypeval='<?php echo $xyz_twap_include_customposttypes; ?>';
+var get_opt_cats='<?php echo get_option('xyz_twap_include_posts');?>';
 jQuery(document).ready(function() {
 	  if(catval=="All")
 		  jQuery("#cat_dropdown_span").hide();
 	  else
 		  jQuery("#cat_dropdown_span").show();
 
+	  if(get_opt_cats==0)
+		  jQuery('#selPostCat').hide();
+	  else
+		  jQuery('#selPostCat').show();
+			  
 	}); 
 	
 function setcat(obj)
@@ -536,6 +573,13 @@ function xyz_twap_info_insert(inf){
     jQuery('#xyz_twap_info :eq(0)').prop('selected', true);
     jQuery("textarea#xyz_twap_twmessage").focus();
 
+}
+function xyz_twap_show_postCategory(val)
+{
+	if(val==0)
+		jQuery('#selPostCat').hide();
+	else
+		jQuery('#selPostCat').show();
 }
 </script>
 	<?php 

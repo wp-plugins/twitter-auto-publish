@@ -48,12 +48,13 @@ function twap_install_free()
 	update_option('xyz_twap_free_version', $currentversion);
 	
 	add_option('xyz_twap_include_pages', '0');
+	add_option('xyz_twap_include_posts', '1');
 	add_option('xyz_twap_include_categories', 'All');
 	add_option('xyz_twap_include_customposttypes', '');
 	add_option('xyz_twap_peer_verification', '1');
 	add_option('xyz_twap_post_logs', '');
 	add_option('xyz_twap_premium_version_ads', '1');
-
+	add_option('xyz_twap_default_selection_edit', '0');
 }
 
 

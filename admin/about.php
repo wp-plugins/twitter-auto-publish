@@ -68,7 +68,7 @@ Twitter Auto Publish automatically publishes posts from your blog to your  Twitt
 	</tr>
 	<!-- Posting Options  -->
 	<tr>
-		<td rowspan="10"><h4>Posting Options</h4></td>
+		<td rowspan="11"><h4>Posting Options</h4></td>
 		<td>Publish to facebook profile/pages</td>
 		<td><img src="<?php echo plugins_url("images/cross.png",__FILE__);?>">
 		</td>
@@ -133,6 +133,14 @@ Twitter Auto Publish automatically publishes posts from your blog to your  Twitt
 	</tr>
 	
 	<tr>
+		<td>Save auto publish settings of individual posts</td>
+		<td><img src="<?php echo plugins_url("images/cross.png",__FILE__);?>">
+		</td>
+		<td><img src="<?php echo plugins_url("images/tick.png",__FILE__);?>">
+		</td>
+	</tr>
+	
+	<tr>
 		<td>Hash Tags support for Facebook, Twitter, Pinterest and Google plus</td>
 		<td><img src="<?php echo plugins_url("images/cross.png",__FILE__);?>">
 		</td>
@@ -151,7 +159,7 @@ Twitter Auto Publish automatically publishes posts from your blog to your  Twitt
 	<!-- Image Options  -->
 	
 	<tr>
-	<td rowspan="3"><h4>Image Options</h4></td>
+	<td rowspan="2"><h4>Image Options</h4></td>
 		<td>Publish images along with post content</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",__FILE__);?>">
 		</td>
@@ -161,14 +169,6 @@ Twitter Auto Publish automatically publishes posts from your blog to your  Twitt
 	
 	
 	<tr>
-		<td>Seperate image url for publishing to multiple social media accounts</td>
-		<td><img src="<?php echo plugins_url("images/cross.png",__FILE__);?>">
-		</td>
-		<td><img src="<?php echo plugins_url("images/tick.png",__FILE__);?>">
-		</td>
-	</tr>
-	
-		<tr>
 		<td>Option to specify preference from featured image, post content, post meta and open graph tags</td>
 		<td><img src="<?php echo plugins_url("images/cross.png",__FILE__);?>">
 		</td>
@@ -179,7 +179,7 @@ Twitter Auto Publish automatically publishes posts from your blog to your  Twitt
 	<!-- Filter Options  -->
 		
 	<tr>
-	<td rowspan="4"><h4>Filter Options</h4></td>
+	<td rowspan="6"><h4>Filter Options</h4></td>
 		<td>Filter posts to publish based on categories</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",__FILE__);?>">
 		</td>
@@ -189,6 +189,14 @@ Twitter Auto Publish automatically publishes posts from your blog to your  Twitt
 	
 	<tr>
 		<td>Filter posts to publish based on custom post types</td>
+		<td><img src="<?php echo plugins_url("images/tick.png",__FILE__);?>">
+		</td>
+		<td><img src="<?php echo plugins_url("images/tick.png",__FILE__);?>">
+		</td>
+	</tr>
+	
+	<tr>
+		<td>Configuration to enable/disable page publishing</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",__FILE__);?>">
 		</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",__FILE__);?>">
@@ -211,6 +219,13 @@ Twitter Auto Publish automatically publishes posts from your blog to your  Twitt
 		</td>
 	</tr>
 	
+	<tr>
+		<td>Enable/Disable page publishing for individual accounts</td>
+		<td><img src="<?php echo plugins_url("images/cross.png",__FILE__);?>">
+		</td>
+		<td><img src="<?php echo plugins_url("images/tick.png",__FILE__);?>">
+		</td>
+	</tr>
 	
 	<!-- Scheduling  -->
 		
