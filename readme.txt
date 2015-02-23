@@ -116,7 +116,8 @@ More questions ? [Drop a mail](http://xyzscripts.com/members/support/ "XYZScript
 = Twitter Auto Publish 1.2 =
 * Option to configure auto publish settings while editing posts/pages
 * General setting to enable/disable post publishing
-* Fixed auto-publish of scheduled posts
+* Added auto publish for scheduled post
+* Fixed issue related to \" in auto publish
 
 = Twitter Auto Publish 1.1.1 =
 * Added compatibility with wordpress 3.9.1

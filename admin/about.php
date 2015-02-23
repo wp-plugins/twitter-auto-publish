@@ -159,7 +159,7 @@ Twitter Auto Publish automatically publishes posts from your blog to your  Twitt
 	<!-- Image Options  -->
 	
 	<tr>
-	<td rowspan="2"><h4>Image Options</h4></td>
+	<td rowspan="3"><h4>Image Options</h4></td>
 		<td>Publish images along with post content</td>
 		<td><img src="<?php echo plugins_url("images/tick.png",__FILE__);?>">
 		</td>
@@ -169,6 +169,14 @@ Twitter Auto Publish automatically publishes posts from your blog to your  Twitt
 	
 	
 	<tr>
+		<td>Separate default image url for publishing to multiple social media accounts</td>
+		<td><img src="<?php echo plugins_url("images/cross.png",__FILE__);?>">
+		</td>
+		<td><img src="<?php echo plugins_url("images/tick.png",__FILE__);?>">
+		</td>
+	</tr>
+	
+		<tr>
 		<td>Option to specify preference from featured image, post content, post meta and open graph tags</td>
 		<td><img src="<?php echo plugins_url("images/cross.png",__FILE__);?>">
 		</td>
