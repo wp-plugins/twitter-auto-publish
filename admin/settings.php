@@ -148,6 +148,7 @@ function dethide(id)
 					<td><input id="xyz_twap_twconsumer_id"
 						name="xyz_twap_twconsumer_id" type="text"
 						value="<?php if($tms1=="") {echo esc_html(get_option('xyz_twap_twconsumer_id'));}?>" />
+						<a href="http://docs.xyzscripts.com/wordpress-plugins/social-media-auto-publish/creating-twitter-application" target="_blank">How can I create a Twitter Application?</a>
 					</td>
 				</tr>
 
@@ -318,7 +319,7 @@ function dethide(id)
 
 				<tr valign="top">
 
-					<td  colspan="1" width="50%">Publish wordpress `pages` to social media
+					<td  colspan="1" width="50%">Publish wordpress `pages` to twitter
 					</td>
 					<td><select name="xyz_twap_include_pages">
 
@@ -333,7 +334,7 @@ function dethide(id)
 				
 				<tr valign="top">
 
-					<td  colspan="1">Publish wordpress `posts` to social media
+					<td  colspan="1">Publish wordpress `posts` to twitter
 					</td>
 					<td><select name="xyz_twap_include_posts" onchange="xyz_twap_show_postCategory(this.value);">
 
