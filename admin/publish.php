@@ -2,7 +2,7 @@
 
 add_action('publish_post', 'xyz_twap_link_publish');
 add_action('publish_page', 'xyz_twap_link_publish');
-add_action('future_to_publish', 'xyz_link_twap_future_to_publish');
+//add_action('future_to_publish', 'xyz_link_twap_future_to_publish');
 
 function xyz_link_twap_future_to_publish($post){
 	$postid =$post->ID;
@@ -19,18 +19,17 @@ foreach ($carr  as $cstyps ) {
 }
 
 function xyz_twap_link_publish($post_ID) {
-	
 	$_POST_CPY=$_POST;
 	$_POST=stripslashes_deep($_POST);
 	
-	if(isset($_POST['xyz_twap_hidden_meta']) && $_POST['xyz_twap_hidden_meta']==1)
-	{$_POST=$_POST_CPY;return ;}
+// 	if(isset($_POST['xyz_twap_hidden_meta']) && $_POST['xyz_twap_hidden_meta']==1)
+// 	{$_POST=$_POST_CPY;return ;}
 	
 	$get_post_meta=get_post_meta($post_ID,"xyz_twap",true);
 	if($get_post_meta!=1)
 		add_post_meta($post_ID, "xyz_twap", "1");
-	else 
-	{$_POST=$_POST_CPY;return;}
+// 	else 
+// 	{$_POST=$_POST_CPY;return;}
 	global $current_user;
 	get_currentuserinfo();
 	$af=get_option('xyz_twap_af');
@@ -111,9 +110,9 @@ function xyz_twap_link_publish($post_ID) {
 
 
 
-		$content = $postpp->post_content;apply_filters('the_content', $content);
+		$content = $postpp->post_content;$content = apply_filters('the_content', $content);
 
-		$excerpt = $postpp->post_excerpt;apply_filters('the_excerpt', $excerpt);
+		$excerpt = $postpp->post_excerpt;$excerpt = apply_filters('the_excerpt', $excerpt);
 		if($excerpt=="")
 		{
 			if($content!="")
@@ -142,7 +141,7 @@ function xyz_twap_link_publish($post_ID) {
 
 		$name = html_entity_decode(get_the_title($postpp->ID), ENT_QUOTES, get_bloginfo('charset'));
 		$caption = html_entity_decode(get_bloginfo('title'), ENT_QUOTES, get_bloginfo('charset'));
-		apply_filters('the_title', $name);
+		$name = apply_filters('the_title', $name);
 
 		$name=strip_tags($name);
 		$name=strip_shortcodes($name);
