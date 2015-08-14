@@ -38,6 +38,8 @@ function twap_free_destroy()
 	delete_option('xyz_twap_twpost_image_permission');
 	delete_option('xyz_twap_twaccestok_secret');
 	delete_option('xyz_twap_twmessage');
+	delete_option('xyz_twap_future_to_publish');
+	delete_option('xyz_twap_apply_filters');
 	
 	delete_option('xyz_twap_free_version');
 	

@@ -6,6 +6,28 @@ get_currentuserinfo();
 $imgpath= plugins_url()."/twitter-auto-publish/admin/images/";
 $heimg=$imgpath."support.png";
 
+
+if($_GET['twap_notice'] == 'hide')
+{
+	update_option('xyz_twap_dnt_shw_notice', "hide");
+	?>
+<style type='text/css'>
+#tw_notice_td
+{
+display:none;
+}
+</style>
+<div class="system_notice_area_style1" id="system_notice_area">
+Thanks again for using the plugin. We will never show the message again.
+ &nbsp;&nbsp;&nbsp;<span
+		id="system_notice_area_dismiss">Dismiss</span>
+</div>
+
+<?php
+}
+
+
+
 $tms1="";
 $tms2="";
 $tms3="";
@@ -276,8 +298,15 @@ function dethide(id)
         $xyz_twap_premium_version_ads=$_POST['xyz_twap_premium_version_ads'];
         $xyz_twap_default_selection_edit=$_POST['xyz_twap_default_selection_edit'];
         
+        $xyz_twap_future_to_publish=$_POST['xyz_twap_future_to_publish'];
 		$twap_customtype_ids="";
 
+		$xyz_twap_applyfilters="";
+		if(isset($_POST['xyz_twap_applyfilters']))
+			$xyz_twap_applyfilters=$_POST['xyz_twap_applyfilters'];
+		
+		
+		
 		if($xyz_customtypes!="")
 		{
 			for($i=0;$i<count($xyz_customtypes);$i++)
@@ -288,7 +317,17 @@ function dethide(id)
 		}
 		$twap_customtype_ids=rtrim($twap_customtype_ids,',');
 
-
+		$xyz_twap_applyfilters_val="";
+		if($xyz_twap_applyfilters!="")
+		{
+			for($i=0;$i<count($xyz_twap_applyfilters);$i++)
+			{
+			$xyz_twap_applyfilters_val.=$xyz_twap_applyfilters[$i].",";
+		}
+		}
+		$xyz_twap_applyfilters_val=rtrim($xyz_twap_applyfilters_val,',');
+		
+		update_option('xyz_twap_apply_filters',$xyz_twap_applyfilters_val);
 		update_option('xyz_twap_include_pages',$xyz_twap_include_pages);
 		update_option('xyz_twap_include_posts',$xyz_twap_include_posts);
 		if($xyz_twap_include_posts==0)
@@ -299,13 +338,15 @@ function dethide(id)
 		update_option('xyz_twap_peer_verification',$xyz_twap_peer_verification);
 		update_option('xyz_twap_premium_version_ads',$xyz_twap_premium_version_ads);
 		update_option('xyz_twap_default_selection_edit',$xyz_twap_default_selection_edit);
+		update_option('xyz_twap_future_to_publish',$xyz_twap_future_to_publish);
 	}
-
+	$xyz_twap_future_to_publish=get_option('xyz_twap_future_to_publish');
 	$xyz_credit_link=get_option('xyz_credit_link');
 	$xyz_twap_include_pages=get_option('xyz_twap_include_pages');
 	$xyz_twap_include_posts=get_option('xyz_twap_include_posts');
 	$xyz_twap_include_categories=get_option('xyz_twap_include_categories');
 	$xyz_twap_include_customposttypes=get_option('xyz_twap_include_customposttypes');
+	$xyz_twap_apply_filters=get_option('xyz_twap_apply_filters');
 	$xyz_twap_peer_verification=esc_html(get_option('xyz_twap_peer_verification'));
 	$xyz_twap_premium_version_ads=esc_html(get_option('xyz_twap_premium_version_ads'));
 	$xyz_twap_default_selection_edit=esc_html(get_option('xyz_twap_default_selection_edit'));
@@ -453,7 +494,50 @@ function dethide(id)
 				</select> 
 				</td></tr>
 				
+				<tr valign="top">
+					<td scope="row" colspan="1">Apply filters during publishing	</td>
+					<td>
+					<?php 
+					$ar2=explode(",",$xyz_twap_apply_filters);
+					for ($i=0;$i<3;$i++ ) {
+						$filVal=$i+1;
+						
+						if($filVal==1)
+							$filName='the_content';
+						else if($filVal==2)
+							$filName='the_excerpt';
+						else if($filVal==3)
+							$filName='the_title';
+						else $filName='';
+						
+						echo '<input type="checkbox" name="xyz_twap_applyfilters[]"  value="'.$filVal.'" ';
+						if(in_array($filVal, $ar2))
+						{
+							echo 'checked="checked"/>';
+						}
+						else
+							echo '/>';
+					
+						echo '<label>'.$filName.'</label><br/>';
+					
+					}
+					
+					?>
+					</td>
+				</tr>
+					
+				<tr valign="top">
 
+					<td scope="row" colspan="1">Enable "future_to_publish" hook	</td>
+					<td><select name="xyz_twap_future_to_publish" id="xyz_twap_future_to_publish" >
+					
+					<option value ="1" <?php if($xyz_twap_future_to_publish=='1') echo 'selected'; ?> >Yes </option>
+					
+					<option value ="2" <?php if($xyz_twap_future_to_publish=='2') echo 'selected'; ?> >No </option>
+					</select>
+					</td>
+				</tr>
+				
 				<tr valign="top">
 
 					<td  colspan="1">Enable credit link to author

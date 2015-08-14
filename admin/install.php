@@ -32,7 +32,12 @@ function twap_install_free()
 	{
 		add_option("xyz_credit_link", '0');
 	}
-
+	
+	$twap_installed_date = get_option('twap_installed_date');
+	if ($twap_installed_date=="") {
+		$twap_installed_date = time();
+		update_option('twap_installed_date', $twap_installed_date);
+	}
 
 	add_option('xyz_twap_twconsumer_secret', '');
 	add_option('xyz_twap_twconsumer_id','');
@@ -42,6 +47,9 @@ function twap_install_free()
 	add_option('xyz_twap_twpost_image_permission', '1');
 	add_option('xyz_twap_twaccestok_secret', '');
 	add_option('xyz_twap_twmessage', '{POST_TITLE} - {PERMALINK}');
+	add_option('xyz_twap_future_to_publish', '1');
+	add_option('xyz_twap_apply_filters', '');
+	
 	
 	$version=get_option('xyz_twap_free_version');
 	$currentversion=xyz_twap_plugin_get_version();

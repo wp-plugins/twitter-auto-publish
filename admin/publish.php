@@ -2,7 +2,10 @@
 
 add_action('publish_post', 'xyz_twap_link_publish');
 add_action('publish_page', 'xyz_twap_link_publish');
-//add_action('future_to_publish', 'xyz_link_twap_future_to_publish');
+$xyz_twap_future_to_publish=get_option('xyz_twap_future_to_publish');
+
+if($xyz_twap_future_to_publish==1)
+	add_action('future_to_publish', 'xyz_link_twap_future_to_publish');
 
 function xyz_link_twap_future_to_publish($post){
 	$postid =$post->ID;
@@ -22,14 +25,26 @@ function xyz_twap_link_publish($post_ID) {
 	$_POST_CPY=$_POST;
 	$_POST=stripslashes_deep($_POST);
 	
-// 	if(isset($_POST['xyz_twap_hidden_meta']) && $_POST['xyz_twap_hidden_meta']==1)
-// 	{$_POST=$_POST_CPY;return ;}
+	
+	$post_twitter_permission=get_option('xyz_twap_twpost_permission');
+	if(isset($_POST['xyz_twap_twpost_permission']))
+		$post_twitter_permission=$_POST['xyz_twap_twpost_permission'];
+	
+	if ($post_twitter_permission != 1) {
+		$_POST=$_POST_CPY;
+		return ;
+	} else if ( isset($_POST['_inline_edit'])  AND (get_option('xyz_twap_default_selection_edit') == 0) ) {
+		$_POST=$_POST_CPY;
+		return;
+	}
+	
+	
+	
 	
 	$get_post_meta=get_post_meta($post_ID,"xyz_twap",true);
 	if($get_post_meta!=1)
 		add_post_meta($post_ID, "xyz_twap", "1");
-// 	else 
-// 	{$_POST=$_POST_CPY;return;}
+
 	global $current_user;
 	get_currentuserinfo();
 	$af=get_option('xyz_twap_af');
@@ -45,9 +60,6 @@ function xyz_twap_link_publish($post_ID) {
 	if(isset($_POST['xyz_twap_twmessage']))
 		$messagetopost=$_POST['xyz_twap_twmessage'];
 
-	$post_twitter_permission=get_option('xyz_twap_twpost_permission');
-	if(isset($_POST['xyz_twap_twpost_permission']))
-		$post_twitter_permission=$_POST['xyz_twap_twpost_permission'];
 
 	$post_twitter_image_permission=get_option('xyz_twap_twpost_image_permission');
 	if(isset($_POST['xyz_twap_twpost_image_permission']))
@@ -108,11 +120,25 @@ function xyz_twap_link_publish($post_ID) {
 		}
 		$link = get_permalink($postpp->ID);
 
-
-
-		$content = $postpp->post_content;$content = apply_filters('the_content', $content);
-
-		$excerpt = $postpp->post_excerpt;$excerpt = apply_filters('the_excerpt', $excerpt);
+		
+		$xyz_twap_apply_filters=get_option('xyz_twap_apply_filters');
+		$ar2=explode(",",$xyz_twap_apply_filters);
+		$con_flag=$exc_flag=$tit_flag=0;
+		if(isset($ar2[0]))
+			if($ar2[0]==1) $con_flag=1;
+		if(isset($ar2[1]))
+			if($ar2[1]==2) $exc_flag=1;
+		if(isset($ar2[2]))
+			if($ar2[2]==3) $tit_flag=1;
+		
+		$content = $postpp->post_content;
+		if($con_flag==1)
+			$content = apply_filters('the_content', $content);
+		$excerpt = $postpp->post_excerpt;
+		if($exc_flag==1)
+			$excerpt = apply_filters('the_excerpt', $excerpt);
+		
+		
 		if($excerpt=="")
 		{
 			if($content!="")
@@ -138,11 +164,11 @@ function xyz_twap_link_publish($post_ID) {
 		else
 			$image_found=0;
 		
-
-		$name = html_entity_decode(get_the_title($postpp->ID), ENT_QUOTES, get_bloginfo('charset'));
+		$name = $postpp->post_title;
 		$caption = html_entity_decode(get_bloginfo('title'), ENT_QUOTES, get_bloginfo('charset'));
-		$name = apply_filters('the_title', $name);
-
+		if($tit_flag==1)
+			$name = apply_filters('the_title', $name);
+		
 		$name=strip_tags($name);
 		$name=strip_shortcodes($name);
 		
@@ -311,7 +337,26 @@ function xyz_twap_link_publish($post_ID) {
 					'publishtime'	=>	$time,
 					'status'	=>	$tw_publish_status_insert
 			);
-			update_option('xyz_twap_post_logs', $post_tw_options);
+			
+			$update_opt_array=array();
+			
+			$arr_retrive=(get_option('xyz_twap_post_logs'));
+			
+			$update_opt_array[0]=isset($arr_retrive[0]) ? $arr_retrive[0] : '';
+			$update_opt_array[1]=isset($arr_retrive[1]) ? $arr_retrive[1] : '';
+			$update_opt_array[2]=isset($arr_retrive[2]) ? $arr_retrive[2] : '';
+			$update_opt_array[3]=isset($arr_retrive[3]) ? $arr_retrive[3] : '';
+			$update_opt_array[4]=isset($arr_retrive[4]) ? $arr_retrive[4] : '';
+			
+			array_shift($update_opt_array);
+			array_push($update_opt_array,$post_tw_options);
+			update_option('xyz_twap_post_logs', $update_opt_array);
+			
+			
+			
+			
+			
+			
 		}
 		
 	}
