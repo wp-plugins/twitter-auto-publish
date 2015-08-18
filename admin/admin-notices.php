@@ -61,6 +61,3 @@ if($twap_installed_date < ( time() - (30*24*60*60) ))
 	}
 }
 ?>
-
-
-
